@@ -1,5 +1,5 @@
 
-
+function vkLogin() {
 var WindowVkLogin = window.open(
 	"https://oauth.vk.com/authorize?"
 	+"client_id=5702856"
@@ -9,3 +9,4 @@ var WindowVkLogin = window.open(
 	+"&response_type=token"
 	+"&v=5.59"
 	+"&state=123456", "_self");
+}
