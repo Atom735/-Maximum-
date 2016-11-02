@@ -27,7 +27,7 @@ header {
 
 header time {
     margin-left: 24px;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-weight: 300;
 }
 
@@ -51,9 +51,21 @@ article header{
 }
 
 article p{
+    font-size: 0.9em;
     margin:  16px;
     margin-right: 10px;
     box-shadow: none;
+}
+
+article img{
+    display: block;
+    max-width: 90%;
+    margin: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow:  0 0 2px 0 rgba(0, 0, 0, 0.5),
+    2px 4px 10px 0 rgba(0, 0, 0, 0.19),
+    3px 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 article footer{
@@ -80,7 +92,7 @@ footer {
 
 main {
     display: block;
-    max-width: 600px;
+    max-width: 632px;
     margin-left: auto;
     margin-right: auto;
     padding: 16px;

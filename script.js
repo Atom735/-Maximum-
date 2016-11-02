@@ -20,6 +20,7 @@ function vkApiGet(CALLBACK, METHOD_NAME, PARAMETERS, ACCESS_TOKEN, V) {
 var NewsAllCount = 0;
 var NewsUpdateCount = 0;
 var NewsUpdate = false;
+var Month = ["янв", "фев", "мар", "апр", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
 
 function NewsMainUpdate(r) {
 	if(!NewsAllCount)
@@ -30,22 +31,58 @@ function NewsMainUpdate(r) {
 	}
 	for(var x in r.response.items) {
 		NewsUpdateCount++;
-		var text = "<p>"+r.response.items[x].text+"</p>";
-		var attachments = "";
+		var text = r.response.items[x].text;
+		var texth = "<p>";
+		var textlink = false;
+		var textlinktxt = false;
+		for (var i = 0; i < text.length; i++) {
+			if(text[i] == '\n') texth += "<br>";
+			else
+			if(textlink) {
+				if(text[i] == '|') textlinktxt = true;
+				else
+				if(text[i] == ']') {
+					textlink = false;
+					texth += "</a>"
+				}
+				else
+				if(textlinktxt) texth += text[i];
+			}
+			else
+			if(text[i] == '[') {
+				textlink = true;
+				textlinktxt=false;
+				texth += '<a href="">';
+			}
+			else
+				texth += text[i];
+		}
+		texth += "</p>"
+		var attachments = "";;
+		var time = new Date(r.response.items[x].date*1000);
 		if(r.response.items[x].attachments) {
 			for(var a in r.response.items[x].attachments) {
 				var b = r.response.items[x].attachments[a];
 				if(b.type == "photo") {
-					attachments += "<br>Прикреплена фотография с ID: " + b.photo.id;
+					attachments += 
+					 '<img src="'
+					+b.photo.photo_604
+					+'" alt="'
+					+b.photo.id
+					+'">';
 				}
 			}
 		}
 		var html = "<article>"
 		+"<header>"
 		+"<h2>Пост с Vk.com</h2>"
-		+"<time>"+r.response.items[x].date+"</time>"
+		+"<time>"
+		+time.getDate()+" "
+		+Month[time.getMonth()]+" в "
+		+time.getHours()+":"+time.getMinutes()
+		+"</time>"
 		+"</header>"
-		+text
+		+texth
 		+attachments
 		+"<footer>"
 		+"Количество коментариев: ["+r.response.items[x].comments.count+"]<br>"
