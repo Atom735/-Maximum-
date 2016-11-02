@@ -50,11 +50,16 @@ main {
 h1 {
     font-size: 2em;
     font-weight: 400;
-    margin: 0px;
+    margin: 0;
 }
 
 h2 {
     font-size: 1.6em;
     font-weight: 400;
     margin: 0px;
+}
+
+div.vkProfileIco {
+    display: block;
+    margin-left: auto;
 }
