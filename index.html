@@ -8,6 +8,12 @@
     <!-- Roboto 100i, 300i, 400i, 500i, 700i, 900i -->
 
     <script src="https://vk.com/js/api/openapi.js?136" type="text/javascript"></script>
+
+    <title>
+        Новости
+    </title>
+</head>
+<body onload="NewsMainLoad();">
     <script type="text/javascript">
         VK.init({apiId: 5702856});
         function NewsMainLoad() {
@@ -26,12 +32,6 @@ alert('Привет, ' + r.response[0].first_name);
 });
         }
     </script>
-
-    <title>
-        Новости
-    </title>
-</head>
-<body onload="NewsMainLoad();">
     <header>
         <h1>Новостная лента</h1>
         <nav>
