@@ -3,40 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
-    <!-- <script type="text/javascript" src="script.js"></script> -->
+    <script type="text/javascript" src="script.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,&subset=cyrillic,cyrillic-ext,latin-ext">
     <!-- Roboto 100i, 300i, 400i, 500i, 700i, 900i -->
-
-    <script src="https://vk.com/js/api/openapi.js?136" type="text/javascript"></script>
-    <script type="text/javascript">
-        function NewsMainLoad() {
-            VK.Api.call("wall.get", 
-                {domain: "ssomaximum",count: 5,filter: "all"}, 
-                function(r) {
-                    if(r.response) {
-                        alert(r.response[0]);
-                    }
-                });
-            
-VK.Api.call('users.get', {user_ids: 6492}, function(r) {
-if(r.response) {
-alert('Привет, ' + r.response[0].first_name);
-}
-});
-        }
-    </script>
     <title>
         Новости
     </title>
 </head>
-<body onload="NewsMainLoad();">
-    <script type="text/javascript">VK.init({apiId: 5702856});</script>
+<body onload="NewsMainLoad();" onscroll="NewsMainLoadNext();">
     <header>
         <h1>Новостная лента</h1>
         <nav>
         </nav>
     </header>
-    <main>
+    <main id="main">
     </main>
     <footer>
     Подвальчик...

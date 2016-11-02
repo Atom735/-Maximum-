@@ -25,6 +25,46 @@ header {
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+header time {
+    margin-left: 24px;
+    font-size: 0.9em;
+    font-weight: 300;
+}
+
+article {
+    display: block;
+    /*width: 100%;*/
+    background-color: #F5F5F5;
+    color: #212121;
+    margin:  16px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5),
+    2px 4px 10px 0 rgba(0, 0, 0, 0.19),
+    3px 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+article header{
+    margin:  0;
+    padding: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-shadow: none;
+}
+
+article p{
+    margin:  16px;
+    margin-right: 10px;
+    box-shadow: none;
+}
+
+article footer{
+    margin:  0;
+    padding: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-shadow: none;
+}
+
+
 footer {
     display: block;
     background-color: #212121;
@@ -56,10 +96,5 @@ h1 {
 h2 {
     font-size: 1.6em;
     font-weight: 400;
-    margin: 0px;
-}
-
-div.vkProfileIco {
-    display: block;
-    margin-left: auto;
+    margin: 0;
 }
