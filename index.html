@@ -9,14 +9,15 @@
 
     <script src="https://vk.com/js/api/openapi.js?136" type="text/javascript"></script>
     <script type="text/javascript">
-        VK.init({
-            apiId: 5702856
-        });
-        function vkLogin() {
-             VK.Auth.login(vkLoginCallback);
-        }
-        function vkLoginCallback() {
-            alert("vk was log in!\nStatus: "+status);
+        VK.init({apiId: 5702856});
+        function NewsMainLoad() {
+            VK.Api.call("wall.get", 
+                {domain: "ssomaximum",count: 5,filter: "all"}, 
+                function(r) {
+                    if(r.response) {
+                        alert(r.response[0]);
+                    }
+                });
         }
     </script>
 
@@ -24,17 +25,16 @@
         Новости
     </title>
 </head>
-<body>
+<body onload="NewsMainLoad();">
     <header>
-        <h1>%STRING_HEADER%</h1>
+        <h1>Новостная лента</h1>
         <nav>
-            <button onclick="vkLogin()">VK_Login()</button>
         </nav>
     </header>
     <main>
     </main>
     <footer>
-    %FOOTER%
+    Подвальчик...
     </footer>
 </body>
 </html>
