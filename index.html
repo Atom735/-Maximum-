@@ -9,9 +9,15 @@
 
     <<script src="https://vk.com/js/api/openapi.js?136" type="text/javascript"></script>
     <script type="text/javascript">
-      VK.init({
-        apiId: 5702856
-      });
+        VK.init({
+            apiId: 5702856
+        });
+        function vkLogin() {
+             VK.Auth.login();
+        }
+        function vkLoginCallback(session, status) {
+            alert("vk was log in!\nStatus: "+status);
+        }
     </script>
 
     <title>
@@ -22,6 +28,7 @@
     <header>
         <h1>%STRING_HEADER%</h1>
         <nav>
+            <button onclick="vkLogin()">VK_Login()</button>
         </nav>
     </header>
     <main>
