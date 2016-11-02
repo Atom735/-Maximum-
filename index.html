@@ -18,6 +18,12 @@
                         alert(r.response[0]);
                     }
                 });
+            
+VK.Api.call('users.get', {user_ids: 6492}, function(r) {
+if(r.response) {
+alert('Привет, ' + r.response[0].first_name);
+}
+});
         }
     </script>
 
