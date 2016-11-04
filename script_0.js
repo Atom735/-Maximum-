@@ -93,7 +93,7 @@ function NewsUpLoadRow() {
 
 function NewsUpLoad(i) {
 	i=Number(i);
-	if(i>NewsAllCount) {NewsDateCount--; return;}
+	if(i>NewsAllCount) {NewsUpdateCount--; return;}
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+(NewsAllCount-i)+".html", true);
 	NewsArray[i] = null;
