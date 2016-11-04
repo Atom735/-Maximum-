@@ -18,9 +18,7 @@ function LoadPageNav() {
 	    	if (reqNav.readyState == 4 && reqNav.status == 200) {
 	    		var nav = document.getElementsByTagName("NAV");
 				nav[0].innerHTML = reqNav.responseText; 
-	        } else
-	            alert("Не удалось получить данные [Nav]:\n" +
-	                reqNav.statusText);
+	        }
 	    });
 	    reqNav.send(null);
 	} 
@@ -66,19 +64,38 @@ function NewsResize() {
 var NewsData = "https://atom735.github.io/-Maximum-/News/";
 var NewsAllCount = 0;
 var NewsUpdateCount = 0;
-var NewsUpdate = false;
+var NewsDateCount = 0;
+var NewsArray;
 function NewsLoad() {
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+"News.txt", true);
     req.onreadystatechange = (function() {
     	if (req.readyState == 4 && req.status == 200) {
-            alert("Удалось получить данные XML:\n" +
-                req.responseXML);
-            alert("Удалось получить данные TEXT:\n" +
-                req.responseText);
-        } else
-            alert("Не удалось получить данные:\n" +
-                req.statusText);
+    		NewsAllCount = Number(req.responseText);
+    		for (var i = 0; i < 2; i++) {
+    			NewsUpLoad(i);
+    		}
+    	}
     });
     req.send(null);
+}
+
+function NewsUpLoad(i) {
+	i=Number(i);
+	var req= new XMLHttpRequest();
+	req.open("GET", NewsData+(NewsAllCount-i)+".html", true);
+	NewsArray[i].txt = null;
+    req.onreadystatechange = (function() {
+    	if (req.readyState == 4 && req.status == 200) {
+    		NewsArray[i].txt = req.responseText;
+    		for (var j = NewsDateCount; j < NewsUpdateCount; j++)
+    			if(NewsArray[j].txt) {
+					var main = document.getElementById('news-main');
+					main.innerHTML += NewsArray[j].txt;
+					NewsDateCount++;
+    			} else return;
+		}
+    });
+    req.send(null);
+    NewsUpdateCount++;
 }
