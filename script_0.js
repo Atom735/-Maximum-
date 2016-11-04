@@ -102,15 +102,16 @@ function NewsUpLoad(i) {
     		for (var j = NewsDateCount; j < NewsUpdateCount && b; j++)
     			b = NewsArray[j];
     		if(b) {
-				var main = document.getElementById('news-main');
-				main.innerHTML += '<div class="news-row">';
+				var txt = "";
+				txt += '<div class="news-row">';
 				for (var j = NewsDateCount; j < NewsUpdateCount; j++) {
-					main.innerHTML += '<a href="'+NewsData+'f'+j+'.html'+'" class="news-card">';
-					main.innerHTML += NewsArray[j];
-					main.innerHTML += '</a>';
+					txt += '<a href="'+NewsData+'f'+j+'.html'+'" class="news-card">';
+					txt += NewsArray[j];
+					txt += '</a>';
 					NewsDateCount++;
 				}
-				main.innerHTML += '</div>';
+				txt += '</div>';
+				document.getElementById('news-main').innerHTML += txt;
 			}
 		}
     });
