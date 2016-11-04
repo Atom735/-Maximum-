@@ -82,8 +82,9 @@ function NewsLoad() {
     req.send(null);
 }
 
-function NewsUpLoadRow(i) {
+function NewsUpLoadRow() {
 	if(NewsUpdateRow) return;
+	NewsUpdateRow = true;
 	NewsUpdateCount+=3;
 	for (var i = 0; i < 3; i++) {
     	NewsUpLoad(NewsDateCount+i);
@@ -92,6 +93,7 @@ function NewsUpLoadRow(i) {
 
 function NewsUpLoad(i) {
 	i=Number(i);
+	if(i>NewsAllCount) {NewsDateCount--; return;}
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+(NewsAllCount-i)+".html", true);
 	NewsArray[i] = null;
@@ -112,6 +114,7 @@ function NewsUpLoad(i) {
 				}
 				txt += '</div>';
 				document.getElementById('news-main').innerHTML += txt;
+				NewsUpdateRow = false;
 			}
 		}
     });
