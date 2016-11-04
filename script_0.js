@@ -65,7 +65,7 @@ var NewsData = "https://atom735.github.io/-Maximum-/News/";
 var NewsAllCount = 0;
 var NewsUpdateCount = 0;
 var NewsDateCount = 0;
-var NewsArray;
+var NewsArray = ["", ""];
 function NewsLoad() {
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+"News.txt", true);
@@ -84,14 +84,14 @@ function NewsUpLoad(i) {
 	i=Number(i);
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+(NewsAllCount-i)+".html", true);
-	NewsArray[i].txt = null;
+	NewsArray[i] = null;
     req.onreadystatechange = (function() {
     	if (req.readyState == 4 && req.status == 200) {
-    		NewsArray[i].txt = req.responseText;
+    		NewsArray[i] = req.responseText;
     		for (var j = NewsDateCount; j < NewsUpdateCount; j++)
-    			if(NewsArray[j].txt) {
+    			if(NewsArray[j]) {
 					var main = document.getElementById('news-main');
-					main.innerHTML += NewsArray[j].txt;
+					main.innerHTML += NewsArray[j];
 					NewsDateCount++;
     			} else return;
 		}
