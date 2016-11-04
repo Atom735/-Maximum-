@@ -16,12 +16,10 @@ function LoadPageNav() {
 		reqNav.open("GET", NavData, true);
 	    reqNav.onreadystatechange = (function() {
 	    	if (reqNav.readyState == 4 && reqNav.status == 200) {
-	            alert("Удалось получить данные XML:\n" +
-	                reqNav.responseXML);
-	            alert("Удалось получить данные TEXT:\n" +
-	                reqNav.responseText);
+	    		var nav = document.getElementsByTagName("NAV");
+				nav[0].innerHTML = reqNav.responseText; 
 	        } else
-	            alert("Не удалось получить данные:\n" +
+	            alert("Не удалось получить данные [Nav]:\n" +
 	                reqNav.statusText);
 	    });
 	    reqNav.send(null);
@@ -75,23 +73,12 @@ function NewsLoad() {
     req.onreadystatechange = (function() {
     	if (req.readyState == 4 && req.status == 200) {
             alert("Удалось получить данные XML:\n" +
-                reqNav.responseXML);
+                req.responseXML);
             alert("Удалось получить данные TEXT:\n" +
-                reqNav.responseText);
+                req.responseText);
         } else
             alert("Не удалось получить данные:\n" +
-                reqNav.statusText);
+                req.statusText);
     });
     req.send(null);
-}
-
-function NewsMainLoadNext() {
-	if(!NewsUpdate){
-		var bot = document.getElementById("main").getBoundingClientRect().bottom + window.pageYOffset;
-		if(window.pageYOffset+window.innerHeight*1.5 > bot)	{
-			NewsUpdate = true;
-			vkApiGet(NewsMainUpdate, "wall.get", 
-				{domain: NewsDomain,count: 5,offset: NewsUpdateCount,filter: "all"});
-		}
-	}
 }
