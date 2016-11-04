@@ -66,18 +66,28 @@ var NewsAllCount = 0;
 var NewsUpdateCount = 0;
 var NewsDateCount = 0;
 var NewsArray = ["", ""];
+var NewsUpdateRow = false;
 function NewsLoad() {
 	var req= new XMLHttpRequest();
 	req.open("GET", NewsData+"News.txt", true);
     req.onreadystatechange = (function() {
     	if (req.readyState == 4 && req.status == 200) {
     		NewsAllCount = Number(req.responseText);
+    		NewsUpdateCount=2;
     		for (var i = 0; i < 2; i++) {
     			NewsUpLoad(i);
     		}
     	}
     });
     req.send(null);
+}
+
+function NewsUpLoadRow(i) {
+	if(NewsUpdateRow) return;
+	NewsUpdateCount+=3;
+	for (var i = 0; i < 3; i++) {
+    	NewsUpLoad(NewsDateCount+i);
+    }
 }
 
 function NewsUpLoad(i) {
@@ -88,14 +98,21 @@ function NewsUpLoad(i) {
     req.onreadystatechange = (function() {
     	if (req.readyState == 4 && req.status == 200) {
     		NewsArray[i] = req.responseText;
-    		for (var j = NewsDateCount; j < NewsUpdateCount; j++)
-    			if(NewsArray[j]) {
-					var main = document.getElementById('news-main');
+    		var b = true;
+    		for (var j = NewsDateCount; j < NewsUpdateCount && b; j++)
+    			b = NewsArray[j];
+    		if(b) {
+				var main = document.getElementById('news-main');
+				main.innerHTML += '<div class="news-row">';
+				for (var j = NewsDateCount; j < NewsUpdateCount; j++) {
+					main.innerHTML += '<a href="'+NewsData+'f'+j+'.html'+'" class="news-card">';
 					main.innerHTML += NewsArray[j];
+					main.innerHTML += '</a>';
 					NewsDateCount++;
-    			} else return;
+				}
+				main.innerHTML += '</div>';
+			}
 		}
     });
     req.send(null);
-    NewsUpdateCount++;
 }
