@@ -2,30 +2,83 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style_0.css">
-    <script type="text/javascript" src="script_0.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&subset=cyrillic,cyrillic-ext,latin-ext">
     <!-- Roboto 100i, 300i, 400i, 500i, 700i, 900i -->
     <title>
-        ССО "Максимум"
+        Главная
     </title>
 </head>
-<body onload="LoadPage();">
-    <header>
-        <header>
-            <h1>Домашняя страница</h1>
+<body onload="LoadPageNav();rResize();" onresize="rResize();">
+    <header id="c-header-head">
+        <header id="c-header">
+            <h1>Главная</h1>
         </header>
-        <nav></nav>
+        <nav id="c-navigate">
+            <a href="#">%LINKS%</a>
+        </nav>
     </header>
-    <main id="main">
-        <div id="news-hot">Тут должна быть карусель, но её нет...</div>
-        <a href="#" class="linkbtn-fullline">Подай заявку на вступление в ряды ССО "Максимум"</a>
-        <div id="news-widget">            
-        </div>
+
+            <script type="text/javascript">
+                function rResize() {
+                    var header = document.getElementById('c-header-head');
+                    var main = document.getElementById('c-main');
+                    var eTP=document.getElementById(ThisPage);
+                    main.style.paddingTop=""+header.clientHeight+"px";
+                    main.style.height=""+eTP.clientHeight+"px";
+                }
+                var ThisPage = "Prev";
+
+                function Func_PageDel(ev) {
+                    ev.currentTarget.style.transform = "translate(-100%,0)";
+                    ev.currentTarget.style.opacity = "0";
+                }
+
+                function Func_GetP(txt) {
+                    var main=document.getElementById('c-main');
+                    var eTP=document.getElementById(ThisPage);
+                    var eNP=document.getElementById(txt);
+
+                    eTP.style.transform = "translate(100%,0)";
+                    eTP.style.opacity = "0";
+                    eTP.style.zIndex = "1";
+                    eTP.addEventListener("transitionend", Func_PageDel, false);
+
+
+                    eNP.removeEventListener('transitionend', Func_PageDel, false);
+                    eNP.style.transform = "translate(0,0)";
+                    eNP.style.opacity = "1";
+                    eNP.style.zIndex = "10";
+                    main.style.height=""+eNP.clientHeight+"px";
+                    window.scrollTo(0,0);
+
+                    ThisPage = txt;
+                }
+            </script>
+    <main id="c-main">    
+        <main id="Prev" style="display: block; transform translateX(0); opacity 1; z-index: 10;">
+            <a onclick="Func_GetP('Next');">Next</a>
+            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
+            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
+            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
+            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
+            И немного текста...
+            <a onclick="Func_GetP('Next');">Next</a>
+        </main>
+        <main id="Next" style="transform translateX(-100%); opacity 0; z-index: 1;">
+            <a onclick="Func_GetP('Prev');">Prev</a>
+            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
+            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
+            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
+            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
+            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
+            И немного текста...
+            <a onclick="Func_GetP('Prev');">Prev</a>
+        </main>
     </main>
-    <footer>
-    Подвальчик...
+    <footer id="c-footer">
+    %FOOTER%
     </footer>
 </body>
 </html>

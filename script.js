@@ -1,111 +1,143 @@
-var req=null;
+var NavData = "https://atom735.github.io/-Maximum-/nav.html";
+NavData = null;
+var NavText = 
+'<a href="#" onclick="GoToNewPage(\'https://atom735.github.io/-Maximum-/index.html\');">Главная</a>'+
+'<a href="#" onclick="GoToNewPage(\'https://atom735.github.io/index.html\');">Новости</a>'+
+'<a href="#">Об отряде</a>'+
+'<a href="#">Достижения</a>'+
+'<a href="#">События</a>'+
+'<a href="#">Медиа</a>'+
+'<a href="#">Документы</a>'+
+'<a href="#">Контакты</a>';
+var FooterData = null;
+var FooterText = 
+'<div style="padding: 16px;">'+
+'<a href="https://vk.com/ssomaximum" style="margin-left: 16px;">'+
+'<div style="background: url(https://vk.com/images/icons/head_icons.png?6) no-repeat;'+
+'background-position: 0 -98px;height: 19px;width: 33px; display: inline-block;'+
+'vertical-align: text-bottom;"></div>'+
+'Мы ВКонтакте</a></div>';
+var PageCache = [{
+	URL: "",
+	Y: 0,
+	E: null
+}];
+function PageGet(url) {
+	for (var i = 0; i < PageCache.length; i++) {
+		if(~PageCache[i].URL.indexOf(url)) return i;
+	}
+	return null;
+}
+var PageNew="";
+var PageOld="";
 
-function vkApiGet(CALLBACK, METHOD_NAME, PARAMETERS, ACCESS_TOKEN, V) {
-	if(V==undefined) 
-		V="5.60";
-	var URL = "https://api.vk.com/method/"+METHOD_NAME+"?";
-	if(PARAMETERS!=undefined)
+function LoadPageNav() {
+	if(NavData) {
+		var reqNav=null;
+		reqNav = new XMLHttpRequest();
+		reqNav.open("GET", NavData, true);
+	    reqNav.onreadystatechange = (function() {
+	    	if (reqNav.readyState == 4 && reqNav.status == 200) {
+	    		var nav = document.getElementsByTagName("NAV");
+				nav[0].innerHTML = reqNav.responseText; 
+	        }
+	    });
+	    reqNav.send(null);
+	} 
+	else {
+		var nav = document.getElementsByTagName("NAV");
+		nav[0].innerHTML = NavText;
+	}
+	if(FooterData) {
+		var reqF=null;
+		reqF = new XMLHttpRequest();
+		reqF.open("GET", FooterData, true);
+	    reqF.onreadystatechange = (function() {
+	    	if (reqF.readyState == 4 && reqF.status == 200) {
+	    		var f = document.getElementById('c-footer');
+				f.innerHTML = reqF.responseText; 
+	        }
+	    });
+	    reqF.send(null);
+	} 
+	else {
+		var reqF = document.getElementById('c-footer');
+		reqF.innerHTML = FooterText;
+	}
+};
+var ThisPage="";
+function rInit() {
+    ThisPage = document.URL;
+    var main = document.getElementById('c-main');
+    var eTP=main.getElementsByTagName('MAIN');
+    eTP[0].id = ThisPage;
+    rResize();
+}
+function rResize() {
+    var header = document.getElementById('c-header-head');
+    var main = document.getElementById('c-main');
+    var eTP=document.getElementById(ThisPage);
+    main.style.paddingTop=""+header.clientHeight+"px";
+	header.style.position = "fixed";
+    main.style.height=""+eTP.clientHeight+"px";
+}
+var scrolled_px = 0;
+var header_px = 0;
+window.onscroll = function() {
+	var header = document.getElementById('c-header-head');
+	var main = document.getElementById('c-main');
+	header.style.position = "fixed";
+	main.style.paddingTop=""+header.clientHeight+"px";
+	var deltaScroll = window.pageYOffset-scrolled_px;
+	scrolled_px = window.pageYOffset;
+	if(deltaScroll<0)
 	{
-		for (var x in PARAMETERS) URL+=x+"="+PARAMETERS[x]+"&";
+		if(header_px-scrolled_px > 0)
+			header_px=scrolled_px;
+		header.style.top = ""+header_px-scrolled_px+"px";
 	}
-	if(ACCESS_TOKEN!=undefined)
-		URL += "access_token="+ACCESS_TOKEN+"&";
-	URL += "v="+V+"&callback="+CALLBACK.name;
-
-    var script = document.createElement('SCRIPT');
-	script.src = URL;
-	document.getElementsByTagName("head")[0].appendChild(script);
+	else
+	{
+		if(header_px<scrolled_px-header.clientHeight)
+			header_px=scrolled_px-header.clientHeight;
+		header.style.top = ""+header_px-scrolled_px+"px";
+	}
 }
-
-var NewsAllCount = 0;
-var NewsUpdateCount = 0;
-var NewsUpdate = false;
-var Month = ["янв", "фев", "мар", "апр", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-
-function NewsMainUpdate(r) {
-	if(!NewsAllCount)
-		NewsAllCount = r.response.count;
-	if(NewsAllCount != r.response.count) {
-		alert("Обнови страничку, для новых постов!");
-		NewsUpdateCount += r.response.count-NewsAllCount;
-	}
-	for(var x in r.response.items) {
-		NewsUpdateCount++;
-		var text = r.response.items[x].text;
-		var texth = "<p>";
-		var textlink = false;
-		var textlinktxt = false;
-		for (var i = 0; i < text.length; i++) {
-			if(text[i] == '\n') texth += "<br>";
-			else
-			if(textlink) {
-				if(text[i] == '|') textlinktxt = true;
-				else
-				if(text[i] == ']') {
-					textlink = false;
-					texth += "</a>"
-				}
-				else
-				if(textlinktxt) texth += text[i];
-			}
-			else
-			if(text[i] == '[') {
-				textlink = true;
-				textlinktxt=false;
-				texth += '<a href="">';
-			}
-			else
-				texth += text[i];
+function LoadNewPage(url, func) {
+	var reqNav=PageGet(url);
+	if(reqNav) {func(4,200,PageCache[reqNav].E.innerHTML, reqNav.E);return;}
+	PageCache.push({URL: url, Y: 0, E: null});
+	var i=PageGet(url);
+	reqNav = new XMLHttpRequest();
+	reqNav.open("GET", url, true);
+	reqNav.onreadystatechange = (function() {
+		var e=null;
+		if(reqNav.readyState == 4 && reqNav.status == 200)
+		{
+			PageCache[i].E=document.createElement("MAIN");
+			PageCache[i].E.id=url;
+			var main=document.getElementById('c-main');
+			PageCache[i].E.innerHTML=reqNav.responseText;
+			var ep=PageCache[i].E.getElementsByTagName("MAIN");
+			if(!ep.length) ep=PageCache[i].E.getElementsByTagName("CONTENT");
+			var ec=ep[0];
+			PageCache[i].E.innerHTML=ec.innerHTML;
+			main.appendChild(PageCache[i].E);
 		}
-		texth += "</p>"
-		var attachments = "";;
-		var time = new Date(r.response.items[x].date*1000);
-		if(r.response.items[x].attachments) {
-			for(var a in r.response.items[x].attachments) {
-				var b = r.response.items[x].attachments[a];
-				if(b.type == "photo") {
-					attachments += 
-					 '<img src="'
-					+b.photo.photo_604
-					+'" alt="'
-					+b.photo.id
-					+'">';
-				}
-			}
-		}
-		var html = "<article>"
-		+"<header>"
-		+"<h2>Пост с Vk.com</h2>"
-		+"<time>"
-		+time.getDate()+" "
-		+Month[time.getMonth()]+" в "
-		+time.getHours()+":"+time.getMinutes()
-		+"</time>"
-		+"</header>"
-		+texth
-		+attachments
-		+"<footer>"
-		+"Количество коментариев: ["+r.response.items[x].comments.count+"]<br>"
-		+"Количество лайков: ["+r.response.items[x].likes.count+"]"
-		+"</footer>"
-		+"</article>";
-		document.getElementById("main").innerHTML += html;
-	}
-	NewsUpdate = false;
+		func(reqNav.readyState,reqNav.status,reqNav.responseText, i);});
+	reqNav.send("");
 }
-
-function NewsMainLoad() {
-	vkApiGet(NewsMainUpdate, "wall.get", 
-		{domain: "ssomaximum",count: 5,filter: "all"});
-}
-
-function NewsMainLoadNext() {
-	if(!NewsUpdate){
-		var bot = document.getElementById("main").getBoundingClientRect().bottom + window.pageYOffset;
-		if(window.pageYOffset+window.innerHeight*1.5 > bot)	{
-			NewsUpdate = true;
-			vkApiGet(NewsMainUpdate, "wall.get", 
-				{domain: "ssomaximum",count: 5,offset: NewsUpdateCount,filter: "all"});
+function Loaded(status, code, txt, e) {
+	if(status == 4) {
+		if(code == 200) {
 		}
 	}
+	console.log("Статус: ["+status+":"+code+"]\nСчитано: " + txt);
+}
+function GoToNewPage(url) {
+	if(~PageNew.indexOf(url)) return;
+	LoadNewPage(url,Loaded);
+	PageOld = PageNew;
+	PageNew = url;
+	document.getElementById('c-main').style.left = "-100%";
 }
