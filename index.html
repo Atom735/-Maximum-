@@ -7,78 +7,75 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&subset=cyrillic,cyrillic-ext,latin-ext">
     <!-- Roboto 100i, 300i, 400i, 500i, 700i, 900i -->
     <title>
-        Главная
+        Главная страница
     </title>
 </head>
-<body onload="LoadPageNav();rResize();" onresize="rResize();">
+<body onload="rInit();" onresize="rResize();">
     <header id="c-header-head">
         <header id="c-header">
-            <h1>Главная</h1>
+            <h1>Главная страница</h1>
         </header>
         <nav id="c-navigate">
-            <a href="#">%LINKS%</a>
+            <a href="index.html">Главная</a>
+            <a href="news.html">Новости</a>
+            <a href="history.html">Об отряде</a>
+            <a href="achievements.html">Достижения</a>
+            <a href="events.html">События</a>
+            <a href="media.html">Медиа</a>
+            <a href="docs.html">Документы</a>
+            <a href="contacts.html">Контакты</a>
         </nav>
     </header>
-
             <script type="text/javascript">
-                function rResize() {
-                    var header = document.getElementById('c-header-head');
-                    var main = document.getElementById('c-main');
-                    var eTP=document.getElementById(ThisPage);
-                    main.style.paddingTop=""+header.clientHeight+"px";
-                    main.style.height=""+eTP.clientHeight+"px";
-                }
-                var ThisPage = "Prev";
-
-                function Func_PageDel(ev) {
-                    ev.currentTarget.style.transform = "translate(-100%,0)";
-                    ev.currentTarget.style.opacity = "0";
-                }
-
-                function Func_GetP(txt) {
-                    var main=document.getElementById('c-main');
-                    var eTP=document.getElementById(ThisPage);
-                    var eNP=document.getElementById(txt);
-
-                    eTP.style.transform = "translate(100%,0)";
-                    eTP.style.opacity = "0";
-                    eTP.style.zIndex = "1";
-                    eTP.addEventListener("transitionend", Func_PageDel, false);
-
-
-                    eNP.removeEventListener('transitionend', Func_PageDel, false);
-                    eNP.style.transform = "translate(0,0)";
-                    eNP.style.opacity = "1";
-                    eNP.style.zIndex = "10";
-                    main.style.height=""+eNP.clientHeight+"px";
-                    window.scrollTo(0,0);
-
-                    ThisPage = txt;
-                }
+                
             </script>
-    <main id="c-main">    
-        <main id="Prev" style="display: block; transform translateX(0); opacity 1; z-index: 10;">
-            <a onclick="Func_GetP('Next');">Next</a>
-            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
-            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
-            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
-            <img src="https://pp.vk.me/c636630/v636630694/3bc7a/b_NFA2OOYb0.jpg">
-            И немного текста...
-            <a onclick="Func_GetP('Next');">Next</a>
-        </main>
-        <main id="Next" style="transform translateX(-100%); opacity 0; z-index: 1;">
-            <a onclick="Func_GetP('Prev');">Prev</a>
-            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
-            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
-            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
-            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
-            <img src="https://pp.vk.me/c626720/v626720420/1f1d6/nco529eQZV4.jpg">
-            И немного текста...
-            <a onclick="Func_GetP('Prev');">Prev</a>
+    <main id="c-main">
+        <main>
+            
+            <div class="c-card">
+                <a href="history.html">
+                <header><h2>ССО "МАКСИМУМ</h2></header>
+                </a>
+                <article>
+                    <p>
+                        Отряд был основан в 2010 году на базе <a href="http://ieml.ru/">Института Экономики Управления и Права</a>. Первый командир — <a href="https://vk.com/comradeusmanov">Усманов Адель</a>. Отряд имеет свою эмблему и особую форму целинки, что сильно отличает отряд от отрядов из других регионов. Среди успехов отряда следует отметить 2 место в общем зачете ВСС «Бованенково 2014» и 3 место по трудовым показателям на ВСС «Бованенково 2013».  
+                    </p>
+                </article>                
+                <a href="history.html">
+                <img src="https://pp.vk.me/c628221/v628221434/92f34/M4WFRsERttk.jpg">
+                </a>
+            </div>
+
+            <a href="news.html" class="c-card" style="display: block;">
+
+<img src="https://pp.vk.me/c604823/v604823589/1761c/LfNw7Jur37U.jpg">
+
+<time>2016</time>
+<h2>Подгрузить новость</h2>
+<article>
+<p>Нажми на эту новость что бы загрузить ещё новостей...</p>
+</article>
+            </a>
+
+            <!-- TODO -->
+            <!-- TODO -->
+            <!-- TODO -->
+            <!-- TODO -->
         </main>
     </main>
     <footer id="c-footer">
-    %FOOTER%
+        <div style="padding: 16px;">
+            <a href="https://vk.com/ssomaximum" style="margin: 0; padding: 1em; height: 36px; ">
+                <div style=" position: absolute; background: url(https://vk.com/images/icons/head_icons.png?6) no-repeat;background-position: 0 -98px; height: 19px; width: 33px; display: inline-block; margin-top: 8.5px;"></div>
+                <div style="height: 36px; display: inline-block; margin-left: 36px; margin-top: 10px; font-size: 16px;">Группа ВКонтакте</div>
+            </a>
+        </div>        
+        <div style="padding: 16px;">
+            <a href="https://www.instagram.com/bestsquadm/" style="margin: 0; padding: 1em; height: 36px;">
+                <div style=" position: absolute; background: url(https://instagramstatic-a.akamaihd.net/h1/sprites/core/d75b42.png) no-repeat; background-position: -214px -179px; height: 33px;width: 33px; display: inline-block;margin-top: 1.5px;"></div>
+                <div style="height: 36px; display: inline-block; margin-left: 36px;  margin-top: 10px; font-size: 16px;">Аккаунт в Instagram</div>
+            </a>
+        </div>
     </footer>
 </body>
 </html>

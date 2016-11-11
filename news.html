@@ -2,74 +2,111 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style_0.css">
-    <script type="text/javascript" src="script_0.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&subset=cyrillic,cyrillic-ext,latin-ext">
     <!-- Roboto 100i, 300i, 400i, 500i, 700i, 900i -->
     <title>
-        Новости ССО "Максимум"
+        Новостная лента
     </title>
 </head>
-<body onload="LoadPage();" onresize="NewsResize();">
-    <header>
-        <header>
+<body onload="rInit();rNewsNextLoad();" onresize="rResize();">
+    <script type="text/javascript">
+    var NewsContent = null;
+    var NewsLoaded = 0;
+    var NewsLoadNeed = 0;
+    function rNewsNextLoad(b) {
+        if(!NewsContent) {
+            var req = new XMLHttpRequest();
+            req.open("GET", "https://atom735.github.io/-Maximum-/news/content.txt", true);
+            req.onreadystatechange = (function() {
+                if (req.readyState == 4 && req.status == 200) {
+                    NewsContent = req.responseText.split('\n');
+                    rNewsNextLoad(true);
+                }
+            });
+            req.send(null);
+            return;
+        }
+
+        if(b) {
+            NewsLoadNeed+=3;
+        }
+
+        var req = new XMLHttpRequest();
+        req.open("GET", "https://atom735.github.io/-Maximum-/news/"+NewsContent[NewsLoaded]+".html", true);
+        req.onreadystatechange = (function() {
+            if (req.readyState == 4 && req.status == 200) {
+                var E=document.createElement("DIV");
+                var ENews=document.getElementsByClassName('c-news');
+                var EEnd=document.getElementById("c-news-loadnext");
+                EEnd=ENews[0].removeChild(EEnd);
+                ENews[0].appendChild(E);
+                ENews[0].appendChild(EEnd);
+                E.id = "news-card-preview-"+NewsContent[NewsLoaded];
+                E.className = "c-card c-news-card";
+                E.innerHTML = req.responseText;
+                NewsLoaded++;
+                if((NewsLoaded < NewsLoadNeed) && (NewsLoaded < NewsContent.length))
+                    rNewsNextLoad();
+                if(NewsLoaded >= NewsContent.length)
+                    EEnd.style.opacity = "0";
+                E.onpageshow=rResize();
+                EEnd.onpageshow=rResize();
+            }
+        });
+        req.send(null);
+    }
+    </script>
+    <header id="c-header-head">
+        <header id="c-header">
             <h1>Новостная лента</h1>
         </header>
-        <nav></nav>
+        <nav id="c-navigate">
+            <a href="index.html">Главная</a>
+            <a href="news.html">Новости</a>
+            <a href="history.html">Об отряде</a>
+            <a href="achievements.html">Достижения</a>
+            <a href="events.html">События</a>
+            <a href="media.html">Медиа</a>
+            <a href="docs.html">Документы</a>
+            <a href="contacts.html">Контакты</a>
+        </nav>
     </header>
-    <main id="news-main">
+    <main id="c-main">
+        <main class="c-news">
+            
+            <a onclick="rNewsNextLoad(true);" id="c-news-loadnext" style="
+    flex: 2 5 175px;transition: opacity .3s ease-in-out;" class="c-card c-news-card">
 
+<img src="https://pp.vk.me/c604823/v604823589/1761c/LfNw7Jur37U.jpg">
 
-        <!-- <div class="news-row">
-            <a href="#" class="news-card">
-                <img src="https://pp.vk.me/c636330/v636330400/32ffa/6ikRcoT-q-o.jpg">
-                <data>4 ноября 2016</data>
-                <h2>Выборы ком.состава!</h2>
-<p>31 октября состоялось знаменательное событие для нашего отряда - Выборы ком.состава!</p>
-<p>Все кандидаты показали хороший уровень подготовки.</p>
-            </a>            
-            <a href="#" class="news-card">
-                <img src="https://pp.vk.me/c636330/v636330400/32ffa/6ikRcoT-q-o.jpg">
-                <data>4 ноября 2016</data>
-                <h2>Выборы ком.состава!</h2>
-<p>31 октября состоялось знаменательное событие для нашего отряда - Выборы ком.состава!</p>
-<p>Все кандидаты показали хороший уровень подготовки.</p>
+<time>2016</time>
+<h2>Подгрузить новость</h2>
+<article>
+<p>Нажми на эту новость что бы загрузить ещё новостей...</p>
+</article>
+            </a>
+
+            <!-- TODO -->
+            <!-- TODO -->
+            <!-- TODO -->
+            <!-- TODO -->
+        </main>
+    </main>
+    <footer id="c-footer">
+        <div style="padding: 16px;">
+            <a href="https://vk.com/ssomaximum" style="margin: 0; padding: 1em; height: 36px; ">
+                <div style=" position: absolute; background: url(https://vk.com/images/icons/head_icons.png?6) no-repeat;background-position: 0 -98px; height: 19px; width: 33px; display: inline-block; margin-top: 8.5px;"></div>
+                <div style="height: 36px; display: inline-block; margin-left: 36px; margin-top: 10px; font-size: 16px;">Группа ВКонтакте</div>
+            </a>
+        </div>        
+        <div style="padding: 16px;">
+            <a href="https://www.instagram.com/bestsquadm/" style="margin: 0; padding: 1em; height: 36px;">
+                <div style=" position: absolute; background: url(https://instagramstatic-a.akamaihd.net/h1/sprites/core/d75b42.png) no-repeat; background-position: -214px -179px; height: 33px;width: 33px; display: inline-block;margin-top: 1.5px;"></div>
+                <div style="height: 36px; display: inline-block; margin-left: 36px;  margin-top: 10px; font-size: 16px;">Аккаунт в Instagram</div>
             </a>
         </div>
-
-
-        <div class="news-row">
-            <a href="#" class="news-card">
-                <img src="https://pp.vk.me/c636330/v636330400/32ffa/6ikRcoT-q-o.jpg">
-                <data>4 ноября 2016</data>
-                <h2>Выборы ком.состава!</h2>
-<p>31 октября состоялось знаменательное событие для нашего отряда - Выборы ком.состава!</p>
-<p>Все кандидаты показали хороший уровень подготовки.</p>
-            </a>
-            <a href="#" class="news-card">
-                <img src="https://pp.vk.me/c636330/v636330400/32ffa/6ikRcoT-q-o.jpg">
-                <data>4 ноября 2016</data>
-                <h2>Выборы ком.состава!</h2>
-<p>31 октября состоялось знаменательное событие для нашего отряда - Выборы ком.состава!</p>
-<p>Все кандидаты показали хороший уровень подготовки.</p>
-            </a>    
-            <a href="#" class="news-card">
-                <img src="https://pp.vk.me/c636330/v636330400/32ffa/6ikRcoT-q-o.jpg">
-                <data>4 ноября 2016</data>
-                <h2>Выборы ком.состава!</h2>
-<p>31 октября состоялось знаменательное событие для нашего отряда - Выборы ком.состава!</p>
-<p>Все кандидаты показали хороший уровень подготовки.</p>
-            </a>
-        </div> -->
-
-
-
-    </main>
-    <a href="#" class="linkbtn-fullline" onclick="NewsUpLoadRow();">Больше новстей</a>
-
-    <footer>
-    Подвальчик...
     </footer>
 </body>
 </html>
