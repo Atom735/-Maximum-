@@ -1,0 +1,175 @@
+// uravneniya diffuzii.cpp: определяет точку входа для консольного приложения.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <cmath>
+
+using namespace std;
+
+//класс временного слоя
+class Tlay
+{
+public:
+	//размер
+	int N;
+	//шаг по времени
+	double h;
+	vector <double> T;
+
+	//конструктор класса. создает слой заданного размера
+	Tlay(int n){
+		N=n;
+		h=1.0/(n-1);
+		T.resize(N);
+	}
+
+	//метод, который записывает слой в файл
+	void Write(const string& filename){
+		ofstream out;
+		out.open(filename, ios::app);
+		for(int i=0; i<N;i++) {
+			out << T[i]<< ' ';
+			}
+		out << '\n';
+		out.close();
+	}
+
+	//перегрузка оператора "равно"
+	void operator = (const Tlay& x){
+		N=x.N;
+		T.resize(N);
+		for (int n=0; n<N; ++n)
+			T[n]=x.T[n];
+	}
+};
+
+//ф-ии с реализацией методов высчитывают один временной слой 
+
+//решение явной разностной схемой
+void sol_ya(Tlay& A, Tlay& B, double tau){
+	double k=tau/(A.h*A.h);
+	//края у второго слоя задаем, чтоб было четенько
+	//ибо они не вычислятся
+	B.T[0]=0;
+	B.T[A.N-1]=1;
+	
+	for(int i=1; i < A.N-1; i++)
+	{
+		B.T[i]=k*(A.T[i+1] - 2* A.T[i] + A.T[i-1]) + A.T[i];
+	}
+}
+
+//метод Гаусса-Зейделя
+void sol_gz(Tlay& A, Tlay& B, double tau){
+	//точность
+	double eps = 1e-5;
+	//счетчик итераций
+	int iter=0;
+	double k=tau/(A.h*A.h);
+	//значение невязки
+	double norm;
+	do{
+		//слою В присваиваем значения слоя А
+		B=A;
+		B.T[1] = (B.T[1] + k*A.T[0] + k*B.T[2]) / (2 * k + 1.);
+		for(int i=1; i<A.N - 2; i++){
+			B.T[i]=(A.T[i] + k*A.T[i-1] + k*B.T[i+1])/(2 * k + 1.);
+		}
+		B.T[A.N - 2] = (A.T[A.N - 2] + k*A.T[A.N - 2] + k*B.T[A.N - 1]) / (2 * k + 1.);
+		
+		norm=0;
+		for (int i = 1; i < A.N -2; i++)
+		{
+			norm += (B.T[i] - A.T[i]);
+		}
+		//ОЧЕНЬ надо присвоить слою А значения слоя В
+		//ну очень, правда
+		//один парень закомментировал это место и два часа не мог понять почему ничего не работает
+		A=B;
+		iter++;
+		//выводим значение невязки, чтобы было на что глазеть во время вычислений
+		cout<<norm<<endl;
+	} while (norm >= eps);
+}
+
+//метод прогонки
+void sol_p(Tlay& A, Tlay& B, double tau){
+	double k=tau/(A.h*A.h);
+
+	vector <double> alpha;
+	alpha.resize(A.N);
+	vector <double> beta;
+	beta.resize(A.N);
+
+	alpha[1]=0;
+	beta[1]=A.T[0]/1;
+
+	double zn;
+	for(int i=1; i<A.N - 1; i++){
+		zn=-k*alpha[i]+(2*k+1);
+		if(i==A.N-2){
+			alpha[i+1]=0.;
+			beta[i+1]=(A.T[i] +k*A.T[i+1] - (-k)*beta[i])/zn;
+		}
+		else if(i==1){
+			alpha[i+1] = -k/(1. +2*k);
+			beta[i+1] = (A.T[i] + k*A.T[i-1])/(1. +2*k);
+		}
+		else{
+			alpha[i+1]= -(-k)/zn;
+			beta[i+1] = (A.T[i] - (-k)*beta[i])/zn;
+		}
+
+	}
+	B.T[A.N-1]=A.T[A.N-1];
+
+	for(int i=A.N-2; i>=0; i--)
+		B.T[i] = alpha[i+1]*B.T[i+1] + beta[i+1];
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	//кол-во шагов по пр-ву
+	int n=50;
+	//кол-во шагов по времени
+	int qt=6250;
+	//вспомогательные переменные
+	double tend, tau;
+	//длина шага по времени
+	tau = 1./qt;
+	double t=0;
+	//создаем два слоя
+	Tlay A(n);
+	Tlay B(n);
+	//заполняем нулями
+	for(int i = 0; i < n; i++){
+		A.T[i]=0;
+		B.T[i]=0;
+	}
+	//правый конец нагрет до температуры 1
+	A.T[n-1]=1;
+	B.T[n-1]=1;
+
+	for(int i = 1; i<qt/100; i++){
+		//эта переменная и цикл после нее нужна чтобы не выводить значения на всех шагах
+		//а только на одной сотой из них
+		tend=i*0.01;
+		while(t<=tend){
+			sol_p(A,B,tau);
+			t+=tau;
+			Tlay temp(n);
+			temp=A;
+			A=B;
+			B=temp;
+		}
+		B.Write("output3.txt");
+	}
+
+	
+
+	return 0;
+}
